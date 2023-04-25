@@ -1,0 +1,131 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Steps.Controls">
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <Color x:Key="PrimaryColor">DodgerBlue</Color>
+    <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />
+    <SolidColorBrush
+        x:Key="SecondColorBrush"
+        Opacity="0.6"
+        Color="{StaticResource PrimaryColor}" />
+
+    <Color x:Key="PrimaryColorCompleted">SeaGreen</Color>
+    <SolidColorBrush x:Key="PrimaryColorBrushCompleted" Color="{StaticResource PrimaryColorCompleted}" />
+    <SolidColorBrush
+        x:Key="SecondColorBrushCompleted"
+        Opacity="0.6"
+        Color="{StaticResource PrimaryColorCompleted}" />
+
+    <Style TargetType="{x:Type local:Step}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:Step}">
+                    <StackPanel x:Name="SingleStep">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Orientation" Value="Horizontal" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding StepOrientation, RelativeSource={RelativeSource TemplatedParent}}" Value="Vertical">
+                                        <Setter Property="Orientation" Value="Vertical" />
+                                        <Setter Property="VerticalAlignment" Value="Top" />
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding StepOrientation, RelativeSource={RelativeSource TemplatedParent}}" Value="Horizontal">
+                                        <Setter Property="Orientation" Value="Horizontal" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="HorizontalAlignment" Value="Left" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <Grid VerticalAlignment="Center">
+                            <Border
+                                x:Name="PART_OuterBorder"
+                                MinWidth="35"
+                                MinHeight="35"
+                                CornerRadius="{TemplateBinding StepRoundness}">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{DynamicResource SecondColorBrush}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding StepIsCompleted, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource SecondColorBrushCompleted}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding StepIsCompleted, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
+                                                <Setter Property="Background" Value="{DynamicResource SecondColorBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <Border
+                                x:Name="PART_InnerBorder"
+                                Width="{TemplateBinding StepWidth}"
+                                Height="{TemplateBinding StepHeight}"
+                                MinWidth="30"
+                                MinHeight="30"
+                                CornerRadius="{TemplateBinding StepRoundness}"
+                                Cursor="Hand">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{DynamicResource PrimaryColorBrush}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding StepIsCompleted, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource PrimaryColorBrushCompleted}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding StepIsCompleted, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
+                                                <Setter Property="Background" Value="{DynamicResource PrimaryColorBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Border.Child>
+                                    <ContentPresenter Content="{TemplateBinding StepContent}" />
+                                </Border.Child>
+                            </Border>
+                        </Grid>
+                        <Rectangle
+                            x:Name="LineRectangle"
+                            StrokeDashArray="3 2"
+                            StrokeThickness="2">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Width" Value="{Binding StepLineSize, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <Setter Property="Stroke" Value="{DynamicResource SecondColorBrush}" />
+                                    <Setter Property="Height" Value="2" />
+                                    <Setter Property="Visibility" Value="{Binding StepLineVisibility, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding StepOrientation, RelativeSource={RelativeSource TemplatedParent}}" Value="Vertical">
+                                            <Setter Property="VerticalAlignment" Value="Top" />
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="Height" Value="{Binding StepLineSize, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <Setter Property="Width" Value="2" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StepOrientation, RelativeSource={RelativeSource TemplatedParent}}" Value="Horizontal">
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="HorizontalAlignment" Value="Left" />
+                                            <Setter Property="Width" Value="{Binding StepLineSize, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <Setter Property="Height" Value="2" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StepIsCompleted, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                            <Setter Property="Stroke" Value="{DynamicResource SecondColorBrushCompleted}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StepIsCompleted, RelativeSource={RelativeSource TemplatedParent}}" Value="False">
+                                            <Setter Property="Stroke" Value="{DynamicResource SecondColorBrush}" />
+
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                        </Rectangle>
+
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
